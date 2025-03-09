@@ -1,34 +1,95 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import CategorySection from './components/CategorySection'
+import SearchBar from './components/SearchBar'
+import { Prompt, PromptsByCategory } from './data/types'
+import ThemeToggle from './components/ThemeToggle'
 
-function App() {
-  const [count, setCount] = useState(0)
+function App(): JSX.Element {
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [prompts, setPrompts] = useState<PromptsByCategory>({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/v1/prompts/')
+        if (!response.ok) {
+          throw new Error('Failed to fetch prompts')
+        }
+        const data: Prompt[] = await response.json()
+        
+        // Group prompts by category
+        const groupedPrompts = data.reduce((acc: PromptsByCategory, prompt) => {
+          const category = prompt.content.category
+          if (!acc[category]) {
+            acc[category] = []
+          }
+          acc[category].push(prompt)
+          return acc
+        }, {})
+        
+        setPrompts(groupedPrompts)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPrompts()
+  }, [])
+
+  // Filter prompts based on search query
+  const filteredPrompts = Object.entries(prompts).reduce((acc: PromptsByCategory, [category, items]) => {
+    const filteredItems = items.filter(item => {
+      const searchLower = searchQuery.toLowerCase();
+      const techStacks = item.content["tech-stack"].split(", "); // Split tech stack string into array
+      
+      return (
+        // Check if any tech stack matches the search query
+        techStacks.some(tech => tech.toLowerCase().includes(searchLower)) ||
+        item.content.prompt.toLowerCase().includes(searchLower) ||
+        item.content.category.toLowerCase().includes(searchLower)
+      );
+    });
+    
+    if (filteredItems.length > 0) {
+      acc[category] = filteredItems;
+    }
+    return acc;
+  }, {});
+
+  if (loading) return <div className="loading">Loading...</div>
+  if (error) return <div className="error">{error}</div>
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <div className="theme-toggle-container">
+        <ThemeToggle />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <main className="main-content">
+        <SearchBar 
+          value={searchQuery}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+        />
+        <div className="categories">
+          {Object.entries(filteredPrompts).map(([category, items]) => (
+            <CategorySection 
+              key={category}
+              title={category}
+              items={items}
+            />
+          ))}
+        </div>
+        {Object.keys(filteredPrompts).length === 0 && searchQuery && (
+          <div className="no-results">
+            No prompts found for "{searchQuery}"
+          </div>
+        )}
+      </main>
+    </div>
   )
 }
 

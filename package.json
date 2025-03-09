@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-favicons": "ts-node scripts/generate-favicons.ts"
   },
   "dependencies": {
     "react": "^19.0.0",
