@@ -1,0 +1,32 @@
+{
+  "Development Roles": {
+    "Front-End Developer": ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Angular", "Vue.js", "Svelte", "Next.js", "Tailwind CSS", "Bootstrap", "Vite"],
+    "Back-End Developer": ["Java (Spring Boot)", "Node.js (Express, NestJS)", "Python (Django, Flask, FastAPI)", "C# (.NET)", "Ruby (Ruby on Rails)", "PHP (Laravel)", "Go", "Rust"],
+    "Full-Stack Developer": ["MongoDB", "Express", "React", "Node.js", "Angular", "Vue.js"],
+    "Mobile Developer": ["Android (Kotlin, Java)", "iOS (Swift)", "Flutter", "React Native", "Jetpack Compose", "Xamarin"],
+    "Game Developer": ["Unity (C#)", "Unreal Engine (C++)", "Godot (GDScript)", "CryEngine", "Phaser.js"]
+  },
+  "Specialized Engineering Roles": {
+    "DevOps Engineer": ["Docker", "Kubernetes", "Terraform", "AWS", "Azure", "GCP", "Jenkins", "Ansible", "Prometheus", "Grafana", "CI/CD Pipelines"],
+    "Site Reliability Engineer (SRE)": ["AWS", "Azure", "GCP", "Kubernetes", "Helm", "Prometheus", "Terraform", "Splunk", "ELK Stack"],
+    "Cloud Engineer": ["AWS (EC2, S3, Lambda, CloudFormation)", "Azure", "GCP", "Serverless Computing", "Kubernetes"],
+    "Data Engineer": ["Apache Spark", "Hadoop", "Airflow", "Kafka", "SQL", "Snowflake", "Redshift", "BigQuery"],
+    "Machine Learning Engineer": ["TensorFlow", "PyTorch", "Scikit-Learn", "Pandas", "NumPy", "Jupyter", "Kubernetes", "MLflow"],
+    "AI/LLM Engineer": ["LangChain", "OpenAI APIs", "Hugging Face", "Transformers", "Pinecone", "Vector Databases"]
+  },
+  "Testing & QA Roles": {
+    "QA Engineer (Manual)": ["TestRail", "JIRA", "Zephyr", "Postman"],
+    "Automation Test Engineer": ["Selenium", "Cypress", "Playwright", "Appium", "JUnit", "TestNG", "Cucumber", "Jest", "Mocha"],
+    "Performance Test Engineer": ["JMeter", "Gatling", "Locust", "k6", "LoadRunner"]
+  },
+  "Product & Management Roles": {
+    "Software Architect": ["UML", "Microservices", "Event-Driven Architecture", "GraphQL", "API Design", "Cloud Platforms"],
+    "Technical Lead": ["Code Reviews", "Agile Development", "DevOps", "CI/CD"],
+    "Product Manager": ["JIRA", "Confluence", "Trello", "Asana", "Productboard"],
+    "Scrum Master": ["Agile", "SAFe", "JIRA", "Confluence"]
+  },
+  "Data & Analytics Roles": {
+    "Data Scientist": ["Python (Pandas, NumPy, SciPy)", "R", "Jupyter", "SQL", "Tableau", "Power BI"],
+    "Business Intelligence (BI) Developer": ["SQL", "Power BI", "Tableau", "Looker", "Google Data Studio"]
+  }
+}
