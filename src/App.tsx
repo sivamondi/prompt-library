@@ -4,12 +4,20 @@ import CategorySection from './components/CategorySection'
 import SearchBar from './components/SearchBar'
 import { Prompt, PromptsByCategory } from './data/types'
 import ThemeToggle from './components/ThemeToggle'
+import techStackData from './data/tech-stack.json'
+
+// Get all roles grouped by category (same as in SubmitPromptModal)
+const rolesByCategory = Object.entries(techStackData).reduce((acc, [category, roles]) => {
+  acc[category] = Object.keys(roles);
+  return acc;
+}, {} as { [key: string]: string[] });
 
 function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [prompts, setPrompts] = useState<PromptsByCategory>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedRole, setSelectedRole] = useState<string>('')
 
   useEffect(() => {
     const fetchPrompts = async () => {
@@ -74,6 +82,31 @@ function App(): JSX.Element {
           value={searchQuery}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
         />
+        <div className="search-actions">
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="role-select"
+          >
+            <option value="">Select Role</option>
+            {Object.entries(rolesByCategory).map(([category, roles]) => (
+              <optgroup key={category} label={category}>
+                {roles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <input
+            type="text"
+            className="search-input-inline"
+            placeholder="Filter by Tech Stack..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <div className="categories">
           {Object.entries(filteredPrompts).map(([category, items]) => (
             <CategorySection 

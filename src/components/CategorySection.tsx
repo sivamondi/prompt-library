@@ -45,6 +45,16 @@ export default function CategorySection({ title, items }: CategorySectionProps):
               </div>
               <div className="card-actions">
                 <button 
+                  onClick={() => setViewPrompt({ name: item.name, prompt: item.content.prompt })}
+                  className="icon-button"
+                  title="View prompt"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                <button 
                   onClick={() => copyToClipboard(item.content.prompt, item.name)}
                   className="icon-button"
                   title="Copy to clipboard"
@@ -71,20 +81,7 @@ export default function CategorySection({ title, items }: CategorySectionProps):
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                   </svg>
                 </button>
-                <button 
-                  onClick={() => setViewPrompt({ name: item.name, prompt: item.content.prompt })}
-                  className="icon-button"
-                  title="View prompt"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
               </div>
-            </div>
-            <div className="prompt-content">
-              <pre>{item.content.prompt}</pre>
             </div>
           </div>
         ))}
