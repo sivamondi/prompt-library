@@ -1,0 +1,77 @@
+package com.ziska.api.service;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class JsonPathResolver {
+
+    public static void processJsonFiles(String dataJsonPath, String kycJsonPath) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            
+            // Read the JSON files
+            JsonNode dataArray = mapper.readTree(new File(dataJsonPath));
+            JsonNode kycJson = mapper.readTree(new File(kycJsonPath));
+
+            // Process each item in data.json
+            for (JsonNode item : dataArray) {
+                JsonNode valueNode = item.get("value");
+                
+                if (valueNode.isObject()) {
+                    // Handle nested value objects
+                    ObjectNode valueObj = (ObjectNode) valueNode;
+                    String path = valueObj.get("value").asText();
+                    String resolvedValue = resolveJsonPath(kycJson, path);
+                    valueObj.put("value", resolvedValue);
+                } else {
+                    // Handle direct value strings
+                    String path = valueNode.asText();
+                    String resolvedValue = resolveJsonPath(kycJson, path);
+                    ((ObjectNode) item).put("value", resolvedValue);
+                }
+            }
+
+            // Write the updated JSON back to file
+            mapper.writerWithDefaultPrettyPrinter()
+                  .writeValue(new File(dataJsonPath), dataArray);
+
+            System.out.println("JSON processing completed successfully!");
+
+        } catch (IOException e) {
+            System.err.println("Error processing JSON files: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static String resolveJsonPath(JsonNode rootNode, String path) {
+        try {
+            // Remove the leading "$." from the path
+            String[] parts = path.substring(2).split("\\.");
+            JsonNode currentNode = rootNode;
+
+            // Traverse the JSON tree
+            for (String part : parts) {
+                currentNode = currentNode.get(part);
+                if (currentNode == null) {
+                    return "";
+                }
+            }
+
+            return currentNode.asText();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static void main(String[] args) {
+        processJsonFiles("documentation/data.json", "documentation/kyc.json");
+    }
+} 
